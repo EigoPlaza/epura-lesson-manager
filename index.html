@@ -119,8 +119,10 @@
       }
     }
 
-    gapiLoaded();
-    gisLoaded();
+    window.onload = () => {
+      gapiLoaded();
+      gisLoaded();
+    };
 
   </script>
 
