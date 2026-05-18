@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://apis.google.com/js/api.js"></script>
   <title>Epura Lesson Manager</title>
 
   <style>
@@ -56,75 +54,74 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="https://apis.google.com/js/api.js"></script>
 
-  <script>
+<script>
+  // あなたのクライアントID
+  const CLIENT_ID = '931312830498-v22h9aslbeoain8gv9e90jefg7ds4d84.apps.googleusercontent.com';
+  // カレンダーの読み取り・書き込み権限（必要に応じて変更してください）
+  const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
 
-    const CLIENT_ID = '931312830498-v22h9aslbeoain8gv9e90jefg7ds4d84.apps.googleusercontent.com';
+  let tokenClient;
+  let gapiInited = false;
+  let gisiInited = false;
 
-    const API_KEY = '';
+  const loginBtn = document.getElementById('loginBtn');
+  const statusDiv = document.getElementById('status');
 
-    const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+  // 1. 各ライブラリの読み込み完了時に実行する初期化関数
+  function gapiLoaded() {
+    gapi.load('client', initializeGapiClient);
+  }
 
-    const SCOPES = 'https://www.googleapis.com/auth/calendar';
+  async function initializeGapiClient() {
+    // カレンダーAPIのディスカロリドキュメントを読み込む
+    await gapi.client.init({
+      discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+    });
+    gapiInited = true;
+    maybeEnableButtons();
+  }
 
-    let tokenClient;
-    let gapiInited = false;
-    let gisInited = false;
+  function gisLoaded() {
+    // 認証用のクライアントを初期化
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: '', // 後でポップアップ実行時に動的に設定
+    });
+    gisiInited = true;
+    maybeEnableButtons();
+  }
 
-    document.getElementById('loginBtn').onclick = handleAuthClick;
-
-    function gapiLoaded() {
-      gapi.load('client', initializeGapiClient);
+  function maybeEnableButtons() {
+    if (gapiInited && gisiInited) {
+      statusDiv.innerText = '準備完了（未ログイン）';
     }
+  }
 
-    async function initializeGapiClient() {
-      await gapi.client.init({
-        discoveryDocs: [DISCOVERY_DOC],
-      });
-
-      gapiInited = true;
-      maybeEnableButtons();
-    }
-
-    function gisLoaded() {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '',
-      });
-
-      gisInited = true;
-      maybeEnableButtons();
-    }
-
-    function maybeEnableButtons() {
-      if (gapiInited && gisInited) {
-        document.getElementById('status').innerText = 'ログイン準備完了';
+  // 2. ログインボタンが押された時の処理
+  loginBtn.onclick = () => {
+    tokenClient.callback = async (resp) => {
+      if (resp.error !== undefined) {
+        throw (resp);
       }
-    }
-
-    async function handleAuthClick() {
-
-      tokenClient.callback = async (resp) => {
-        if (resp.error !== undefined) {
-          throw(resp);
-        }
-
-        document.getElementById('status').innerText = 'Google Calendar 接続成功 ☕️';
-      };
-
-      if (gapi.client.getToken() === null) {
-        tokenClient.requestAccessToken({prompt: 'consent'});
-      } else {
-        tokenClient.requestAccessToken({prompt: ''});
-      }
-    }
-
-    window.onload = () => {
-      gapiLoaded();
-      gisLoaded();
+      statusDiv.innerText = 'ログイン成功！カレンダーに接続されました。';
+      loginBtn.innerText = '接続済み';
+      
+      // ここで gapi.client.calendar.events.list(...) などを呼んで
+      // カレンダーの予定を取得する処理を記述できます。
     };
 
-  </script>
+    // 既存のトークンがあれば再利用、なければポップアップを表示
+    if (gapi.client.getToken() === null) {
+      tokenClient.requestAccessToken({prompt: 'consent'});
+    } else {
+      tokenClient.requestAccessToken({prompt: ''});
+    }
+  };
+</script>
+
+<script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+<script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 
 </body>
 </html>
