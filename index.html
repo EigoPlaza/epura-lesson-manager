@@ -71,12 +71,12 @@
       color: #555;
     }
 
-    .lesson-request {
-      margin-top: 6px;
-      font-size: 14px;
-      color: #374151;
-      font-weight: 500;
-    }
+  .lesson-request {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+  }
 
     .note {
       background: #f9fafb;
@@ -301,6 +301,7 @@ function createLessonHTML(event, overdue) {
         </div>
         <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
         <div class="lesson-name">${escapeHtml(event.serviceName || '')}</div>
+        
         ${event.lessonRequest
           ? `<div class="lesson-request">📘 ${escapeHtml(event.lessonRequest)}</div>`
           : ''
@@ -315,8 +316,8 @@ function createLessonHTML(event, overdue) {
       <div class="buttons">
 
         ${isValidUrl(event.lessonUrl)
-          ? `<a class="btn-link btn-primary" href="${event.lessonUrl}" target="_blank">Lesson</a>`
-          : ''
+          ? `<a class="btn-link btn-primary" href="${event.lessonUrl}" target="_blank">Lesson URL</a>`
+          : `<button class="btn-disabled" disabled>Lesson URL</button>`
         }
 
         ${event.zoom
