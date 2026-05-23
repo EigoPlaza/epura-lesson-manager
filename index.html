@@ -264,6 +264,11 @@ function renderLessons(events) {
 
     const start = new Date(event.start);
 
+      // 完了済み過去は表示しない
+    if (event.completed && start < now) {
+      return; 
+    }
+    
     if (!event.completed && start < now) {
       overdue.push(event);
     } else {
