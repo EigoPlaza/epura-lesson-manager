@@ -335,6 +335,7 @@ function createLessonHTML(event, overdue) {
             <textarea
               id="feedback-${event.id}"
               placeholder="Teacher feedback..."
+              ${event.completed ? 'readonly' : ''}
             ></textarea>
           </div>
         `
@@ -383,7 +384,7 @@ async function completeLesson(eventId) {
 
     console.log(data);
 
-    alert('POST成功 ☕️');
+    await loadLessons();
 
   } catch (error) {
 
