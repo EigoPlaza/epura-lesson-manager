@@ -373,6 +373,7 @@ async function completeLesson(eventId) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        calendarId: CALENDAR_ID,
         eventId,
         feedback,
       }),
