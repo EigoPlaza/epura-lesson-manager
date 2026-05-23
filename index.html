@@ -284,6 +284,7 @@ function createLessonHTML(event, overdue) {
 
   const startTime = formatTime(start);
   const endTime = formatTime(end);
+  const dateText = formatDate(start);
 
   const completeButton = event.completed
     ? `<div class="completed-label">Completed</div>`
@@ -295,7 +296,9 @@ function createLessonHTML(event, overdue) {
     <div class="lesson-row ${overdue ? 'overdue' : ''}">
 
       <div class="top-line">
-        <div class="time">${startTime} - ${endTime}</div>
+        <div class="time">
+          ${dateText} ${startTime} - ${endTime}
+        </div>
         <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
         <div class="lesson-name">${escapeHtml(event.serviceName || '')}</div>
         ${event.lessonRequest
@@ -336,6 +339,13 @@ function formatTime(date) {
   return date.toLocaleTimeString('ja-JP', {
     hour: '2-digit',
     minute: '2-digit'
+  });
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString('ja-JP', {
+    month: 'numeric',
+    day: 'numeric'
   });
 }
 
