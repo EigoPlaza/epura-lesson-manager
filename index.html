@@ -71,6 +71,13 @@
       color: #555;
     }
 
+    .lesson-request {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+    }
+
     .note {
       background: #f9fafb;
       border-radius: 8px;
@@ -290,7 +297,11 @@ function createLessonHTML(event, overdue) {
       <div class="top-line">
         <div class="time">${startTime} - ${endTime}</div>
         <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
-        <div class="lesson-name">${escapeHtml(event.lessonName || '')}</div>
+        <div class="lesson-name">${escapeHtml(event.serviceName || '')}</div>
+        ${event.lessonRequest
+          ? `<div class="lesson-request">📘 ${escapeHtml(event.lessonRequest)}</div>`
+          : ''
+        }
       </div>
 
       ${event.studentNote
@@ -300,7 +311,7 @@ function createLessonHTML(event, overdue) {
 
       <div class="buttons">
 
-        ${event.lessonUrl
+        ${isValidUrl(event.lessonUrl)
           ? `<a class="btn-link btn-primary" href="${event.lessonUrl}" target="_blank">Lesson</a>`
           : ''
         }
@@ -328,6 +339,11 @@ function formatTime(date) {
   });
 }
 
+function isValidUrl(str) {
+  return str &&
+    (str.startsWith('http://') || str.startsWith('https://'));
+}
+  
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
