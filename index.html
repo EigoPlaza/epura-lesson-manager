@@ -370,6 +370,14 @@ async function completeLesson(eventId) {
     alert('Teacher feedbackを入力してください ☕️');
     return;
   }
+
+  const confirmed = confirm(
+    'このレッスンをCompleteしますか？\n\n完了後は未完了一覧から消えます。'
+  );
+  
+  if (!confirmed) {
+    return;
+  }
   
   try {
 
