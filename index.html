@@ -360,19 +360,36 @@ function createLessonHTML(event, overdue) {
   `;
 }
 
-function completeLesson(eventId) {
+async function completeLesson(eventId) {
 
   const feedback =
     document.getElementById(`feedback-${eventId}`)?.value || '';
 
-  console.log({
-    eventId,
-    feedback
-  });
+  try {
 
-  alert(
-    `Complete:\n\nEvent ID: ${eventId}\n\nFeedback:\n${feedback}`
-  );
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventId,
+        feedback,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+
+    alert('POST成功 ☕️');
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert('POST失敗');
+  }
 }
 
 function formatTime(date) {
