@@ -153,6 +153,15 @@
       cursor: not-allowed;
     }
 
+    .btn-zoom {
+      background: #2563eb;
+      color: white;
+    }
+    
+    .btn-zoom:hover {
+      background: #1d4ed8;
+    }
+    
     .completed-label {
       display: inline-block;
       margin-top: 12px;
@@ -355,7 +364,7 @@ function createLessonHTML(event, overdue) {
         }
 
         ${event.zoom
-          ? `<a class="btn-link btn-gray" href="${event.zoom}" target="_blank">Zoom</a>`
+          ? `<a class="btn-link btn-zoom" href="${event.zoom}" target="_blank">Zoom</a>`
           : ''
         }
 
