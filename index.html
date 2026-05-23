@@ -366,6 +366,11 @@ async function completeLesson(eventId) {
   const feedback =
     document.getElementById(`feedback-${eventId}`)?.value || '';
 
+  if (!feedback.trim()) {
+    alert('Teacher feedbackを入力してください ☕️');
+    return;
+  }
+  
   try {
 
     const response = await fetch(WORKER_URL, {
