@@ -361,7 +361,18 @@ function createLessonHTML(event, overdue) {
 }
 
 function completeLesson(eventId) {
-  alert('Complete機能は次のステップで実装します ☕️');
+
+  const feedback =
+    document.getElementById(`feedback-${eventId}`)?.value || '';
+
+  console.log({
+    eventId,
+    feedback
+  });
+
+  alert(
+    `Complete:\n\nEvent ID: ${eventId}\n\nFeedback:\n${feedback}`
+  );
 }
 
 function formatTime(date) {
