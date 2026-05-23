@@ -258,7 +258,7 @@ function renderLessons(events) {
   if (!events.length) {
     content.innerHTML = `
       <div class="empty">
-        今日・明日の予定はありません ☕️
+        No upcoming lessons for today or tomorrow ☕️
       </div>
     `;
     return;
@@ -288,7 +288,7 @@ function renderLessons(events) {
   let html = '';
 
   if (overdue.length) {
-    html += `<div class="section-title">⚠ 未完了レッスン</div>`;
+    html += `<div class="section-title">⚠️ Pending Lessons</div>`;
 
     overdue.forEach(event => {
       html += createLessonHTML(event, true);
@@ -296,7 +296,7 @@ function renderLessons(events) {
   }
 
   if (upcoming.length) {
-    html += `<div class="section-title">📅 予定</div>`;
+    html += `<div class="section-title">📅 Upcoming Lessons</div>`;
 
     upcoming.forEach(event => {
       html += createLessonHTML(event, false);
@@ -381,12 +381,12 @@ async function completeLesson(eventId) {
     document.getElementById(`feedback-${eventId}`)?.value || '';
 
   if (!feedback.trim()) {
-    alert('Teacher feedbackを入力してください ☕️');
+    alert('Please enter teacher feedback.');
     return;
   }
 
   const confirmed = confirm(
-    'このレッスンをCompleteしますか？\n\n完了後は未完了一覧から消えます。'
+    'Are you sure you want to complete this lesson?\n\nOnce completed, it will disappear from the pending lessons list.'
   );
   
   if (!confirmed) {
