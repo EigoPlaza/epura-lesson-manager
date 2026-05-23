@@ -295,18 +295,19 @@ function createLessonHTML(event, overdue) {
   return `
     <div class="lesson-row ${overdue ? 'overdue' : ''}">
 
-      <div class="top-line">
-        <div class="time">
-          ${dateText} ${startTime} - ${endTime}
-        </div>
-        <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
-        <div class="lesson-name">${escapeHtml(event.serviceName || '')}</div>
-        
-        ${event.lessonRequest
-          ? `<div class="lesson-request">📘 ${escapeHtml(event.lessonRequest)}</div>`
-          : ''
-        }
-      </div>
+    <div class="top-line">
+      <div class="time">${dateText} ${startTime} - ${endTime}</div>
+      <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
+    </div>
+    
+    <div class="lesson-name">
+      ${escapeHtml(event.serviceName || '')}
+    </div>
+    
+    ${event.lessonRequest
+      ? `<div class="lesson-request">📘 ${escapeHtml(event.lessonRequest)}</div>`
+      : ''
+    }
 
       ${event.studentNote
         ? `<div class="note">${escapeHtml(event.studentNote)}</div>`
