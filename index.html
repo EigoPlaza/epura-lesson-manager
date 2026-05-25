@@ -225,7 +225,12 @@
 const WORKER_URL = 'https://epura-lesson-manager-api.eigoplaza.workers.dev';
 
 // ← 講師ごとに変更
-const CALENDAR_ID = 'fa0092befcd35f5f6f493118aea95c53de18b4eece3a460000db501409f17592@group.calendar.google.com';
+const params = new URLSearchParams(window.location.search);
+const CALENDAR_ID = params.get('calendarId');
+if (!CALENDAR_ID) {
+  showError('calendarId is missing');
+  throw new Error('calendarId missing');
+}
 
 async function loadLessons() {
   try {
