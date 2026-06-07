@@ -306,7 +306,7 @@ function renderLessons(events) {
   let html = '';
 
   if (overdue.length) {
-    html += `<div class="section-title">⚠️ Pending Lessons</div>`;
+    html += `<div class="section-title">📝 Awaiting Feedback</div>`;
 
     overdue.forEach(event => {
       html += createLessonHTML(event, true);
