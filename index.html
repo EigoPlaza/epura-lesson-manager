@@ -88,6 +88,19 @@
       line-height: 1.5;
     }
 
+    .student-message-label {
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #92400e;
+    }
+    
+    .note.student-message {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      color: #374151;
+    }
+
     .teacher-feedback {
       margin-top: 12px;
     }
@@ -344,7 +357,10 @@ function createLessonHTML(event, overdue) {
     }
 
       ${event.studentNote
-        ? `<div class="note">${escapeHtml(event.studentNote)}</div>`
+        ? `
+          <div class="student-message-label">📩 Message from Student</div>
+          <div class="note student-message">${escapeHtml(event.studentNote)}</div>
+        `
         : ''
       }
 
