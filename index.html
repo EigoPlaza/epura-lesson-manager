@@ -240,6 +240,7 @@
 
 const WORKER_URL = 'https://epura-lesson-manager-api.eigoplaza.workers.dev';
 const DISPLAY_TIME_ZONE = 'Asia/Manila'; // PHT
+let isCompleting = false;
 
 // ← 講師ごとに変更
 const params = new URLSearchParams(window.location.search);
@@ -342,7 +343,7 @@ function createLessonHTML(event, overdue) {
   const completeButton = event.completed
     ? `<div class="completed-label">Completed</div>`
     : event.canComplete
-      ? `<button class="btn-green" onclick="completeLesson('${event.id}')">Complete</button>`
+      ? `<button class="btn-green" onclick="completeLesson('${event.id}', this)">Complete</button>`
       : `<button class="btn-disabled" disabled>Complete</button>`;
 
   return `
@@ -402,7 +403,11 @@ function createLessonHTML(event, overdue) {
   `;
 }
 
-async function completeLesson(eventId) {
+async function completeLesson(eventId, button) {
+
+  if (isCompleting) {
+    return;
+  }
 
   const feedback =
     document.getElementById(`feedback-${eventId}`)?.value || '';
@@ -418,6 +423,13 @@ async function completeLesson(eventId) {
   
   if (!confirmed) {
     return;
+  }
+
+  isCompleting = true;
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Completing...';
   }
   
   try {
@@ -438,6 +450,11 @@ async function completeLesson(eventId) {
 
     console.log(data);
 
+    if (!response.ok || !data.success) {
+      alert(data.error || 'Failed to complete lesson.');
+      return;
+    }
+
     await loadLessons();
 
   } catch (error) {
@@ -445,6 +462,9 @@ async function completeLesson(eventId) {
     console.error(error);
 
     alert('POST失敗');
+
+  } finally {
+    isCompleting = false;
   }
 }
 
