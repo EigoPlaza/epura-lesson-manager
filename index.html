@@ -225,7 +225,10 @@
 
 <div class="container">
   <h1>Lesson Manager</h1>
-
+  <div style="margin-top:-10px; margin-bottom:20px; color:#666; font-size:14px;">
+    Times shown in PHT
+  </div>
+  
   <div id="loading" class="loading">
     Loading lessons...
   </div>
@@ -236,6 +239,7 @@
 <script>
 
 const WORKER_URL = 'https://epura-lesson-manager-api.eigoplaza.workers.dev';
+const DISPLAY_TIME_ZONE = 'Asia/Manila'; // PHT
 
 // ← 講師ごとに変更
 const params = new URLSearchParams(window.location.search);
@@ -333,6 +337,8 @@ function createLessonHTML(event, overdue) {
   const endTime = formatTime(end);
   const dateText = formatDate(start);
 
+  const displayName = event.preferredName || event.studentName || 'Unknown';
+
   const completeButton = event.completed
     ? `<div class="completed-label">Completed</div>`
     : event.canComplete
@@ -344,7 +350,7 @@ function createLessonHTML(event, overdue) {
 
     <div class="top-line">
       <div class="time">${dateText} ${startTime} - ${endTime}</div>
-      <div class="student">${escapeHtml(event.studentName || 'Unknown')}</div>
+      <div class="student">${escapeHtml(displayName || 'Unknown')}</div>
     </div>
     
     <div class="lesson-name">
@@ -443,14 +449,17 @@ async function completeLesson(eventId) {
 }
 
 function formatTime(date) {
-  return date.toLocaleTimeString('ja-JP', {
+  return date.toLocaleTimeString('en-US', {
+    timeZone: DISPLAY_TIME_ZONE,
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    hour12: false
   });
 }
 
 function formatDate(date) {
-  return date.toLocaleDateString('ja-JP', {
+  return date.toLocaleDateString('en-US', {
+    timeZone: DISPLAY_TIME_ZONE,
     month: 'numeric',
     day: 'numeric'
   });
